@@ -21,5 +21,6 @@
   "bugs": {
     "url": "https://github.com/iamshaunjp/node-express-jwt-auth/issues"
   },
+  "type" : "module", 
   "homepage": "https://github.com/iamshaunjp/node-express-jwt-auth#readme"
 }
