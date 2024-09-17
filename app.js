@@ -19,9 +19,10 @@ app.set("view engine", "ejs");
 
 // database connection
 const dbURI = "mongodb+srv://Alex:admin@cluster0.vdw2h.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+//la Key generalmente sarà salvata in un file .env
 const connectDB = async () => {
     try {
-        await mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
+        await mongoose.connect(dbURI)
         app.listen(3000)
         console.log("Server start at http://localhost:3000")
     } catch (error) {
@@ -34,11 +35,10 @@ connectDB()
 //     .catch((err) => console.log(err));
 
 // routes
+//istanziamo le route, avremo le funzioni in controller.js che si occuperanno di manipolare/controllare il nostro db
+//il primo argomento indica la route da navigare, il secondo arg la funzione da eseguire quando viene mandata la richiesta
 app.get("/", (req, res) => res.render("home"));
 app.get("/smoothies", (req, res) => res.render("smoothies")); //indica i file in View
-
-//istanziamo le route, avremo le funzioni in controller.mjs
-//che si occuperanno di manipolare/controllare il nostro db
 app.get("/signup", signUp);
 app.post("/signup", signUpPost);
 app.get("/login", login);
