@@ -6,6 +6,7 @@ const app = express();
 
 // middleware
 app.use(express.static('public'));
+app.use(express.json()) //per poter leggere file json (express non è in grado), trasfroma i file json in obj
 
 // view engine, permette di settare la vista del motore utilizzato, in questo caso ejs una forma di html e js
 app.set('view engine', 'ejs');

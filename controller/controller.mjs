@@ -4,6 +4,8 @@ export async function signUp(req , res){
 }
 
 export async function signUpPost(req , res){
+    const {email , password } = req.body
+    console.log(email , password);
     res.send('new singup')
 }
 
@@ -13,5 +15,8 @@ export async function login(req , res){
 }
 
 export async function loginPost(req , res){
+    // req.body possiamo accedere alla richiesta
+    const {email , password } = req.body
+    console.log(email , password);
     res.render('user login')
 }
