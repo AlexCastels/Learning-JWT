@@ -1,5 +1,6 @@
 import mongoose from 'mongoose'
 import pkg from 'validator';
+import bcrypt from 'bcrypt'
 const { isEmail } = pkg;
 
 //si importano tutti i pakage di validator e si destrutturano le funzioni che servono
@@ -33,11 +34,20 @@ userSchema.post('save' , function(doc){ //documento
 })
 
 //avviare una funzione prima del salvataggio in DB, middleware con .pre
-//all'interno delle middleware, this si riferisce all'oggetto su cui la middleware sta operando
-userSchema.pre('save' , function(){
-    console.log('User about to be created and saved' , this);
+//all'interno delle middleware, this si riferisce all' istanza dell'oggetto su cui la middleware sta operando
+userSchema.pre('save' , async function(){
+    const salt = await bcrypt.genSalt(); //genera il salt che verrà accoppiato successivamente
+    this.password = await bcrypt.hash(this.password, salt) //genera l'hash della pass insieme al salt
+    
 })
 
 const User = mongoose.model('user' , userSchema)
 
 export default User
+
+//hashing a password
+//utilizzando bcrypt abbiamo la possibilita di criptare le nostre password nel DB, non è mai un azione sicura quella di 
+//storare le password direttamente nel DB, hashing sta per trasformare la password in una serie di caratteri alfanumerici
+//ma solamente questo non basta, perchè si potrebbe eseguire un azione inversa per poter recuperare la pass originale dal DB,
+//per una maggiore sicurezza viene generato un salt, cioe un codice univoco unito alla password e poi convertito in hash
+//per garantire ancor più sicurezza, dopo di chè bisognerà avere un confronto tra salt e password per garantire l'accesso
