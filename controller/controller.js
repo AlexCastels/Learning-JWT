@@ -41,7 +41,7 @@ export async function signUpPost(req , res){
         //con .status settiamo lo stato in risposta, e mandiamo il json con i dati
         //con .send invece mandiamo qualcosa da visualizzare nel browser
         const user = await User.create({email ,password})
-        res.status(201).json(user).send('new singup')
+        res.status(201).json(user)
     } catch (error) {
         const errors = handleError(error)
         res.status(400).json(errors)

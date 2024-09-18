@@ -25,6 +25,19 @@ const userSchema = new mongoose.Schema({
     },
 })
 
+//hook di mongoose
+//avviare una funzione dopo il salvataggio nel DB, mongoose middleware, ce ne sono di diverse, ed il tipo viene specificato come
+//1° arg, il secondo argomento è la funzione che verrà avviata
+userSchema.post('save' , function(doc){ //documento
+    console.log('new user was created' , doc)
+})
+
+//avviare una funzione prima del salvataggio in DB, middleware con .pre
+//all'interno delle middleware, this si riferisce all'oggetto su cui la middleware sta operando
+userSchema.pre('save' , function(){
+    console.log('User about to be created and saved' , this);
+})
+
 const User = mongoose.model('user' , userSchema)
 
 export default User
