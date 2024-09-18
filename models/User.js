@@ -37,8 +37,7 @@ userSchema.post('save' , function(doc){ //documento
 //all'interno delle middleware, this si riferisce all' istanza dell'oggetto su cui la middleware sta operando
 userSchema.pre('save' , async function(){
     const salt = await bcrypt.genSalt(); //genera il salt che verrà accoppiato successivamente
-    this.password = await bcrypt.hash(this.password, salt) //genera l'hash della pass insieme al salt
-    
+    this.password = await bcrypt.hash(this.password, salt) //genera l'hash della pass insieme al salt    
 })
 
 const User = mongoose.model('user' , userSchema)
