@@ -48,11 +48,11 @@ export async function signUpPost(req , res){
         //con .send invece mandiamo qualcosa da visualizzare nel browser
         const user = await User.create({email ,password});
         const token = createToken(user._id) //passiamo l'id recuperato dal DB, in mongo id = _id
-        res.cookie('jwt', token, {httpOnly : true , maxAge: maxAge * 1000}) //salviamo il token in cookie
+        res.cookie('jwt', token, {httpOnly : true , maxAge: maxAge * 1000}) //salviamo il token in cookie 
         res.status(201).json({user: user._id})
-    } catch (error) {
-        const errors = handleError(error)
-        res.status(400).json(errors)
+    } catch (err) {
+        const errors = handleError(err)
+        res.status(400).json({errors})
     }
 }
 
