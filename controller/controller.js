@@ -1,4 +1,5 @@
 import User from "../models/User.js";
+import jwt from 'jsonwebtoken';
 
 //handle errors
 //così possiamo gestire meglio gli errori che recuperiamo dallo schema, avendo informazioni più dettagliate sul tipo di errore
@@ -25,8 +26,13 @@ function handleError(err){
             errors[properties.path] = properties.message
         })
     }
-
     return errors
+}
+
+const maxAge = 3 * 24 * 60 * 60 //3 day in millisec
+const createToken = (id) => { 
+    //genera il token tramite .sign, 1° arg il riferimento, 2° la key segreta, 3° obj di opzioni
+    return jwt.sign({id} , 'super secret key' , {expiresIn: maxAge})
 }
 
 export async function signUp(req , res){
@@ -40,14 +46,15 @@ export async function signUpPost(req , res){
         //il processo è asincrono ovviamente 
         //con .status settiamo lo stato in risposta, e mandiamo il json con i dati
         //con .send invece mandiamo qualcosa da visualizzare nel browser
-        const user = await User.create({email ,password})
-        res.status(201).json(user)
+        const user = await User.create({email ,password});
+        const token = createToken(user._id) //passiamo l'id recuperato dal DB, in mongo id = _id
+        res.cookie('jwt', token, {httpOnly : true , maxAge: maxAge * 1000}) //salviamo il token in cookie
+        res.status(201).json({user: user._id})
     } catch (error) {
         const errors = handleError(error)
         res.status(400).json(errors)
     }
 }
-
 
 export async function login(req , res){
     res.render('login')

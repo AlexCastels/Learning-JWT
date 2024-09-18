@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
-import pkg from 'validator';
 import bcrypt from 'bcrypt'
+import pkg from 'validator';
 const { isEmail } = pkg;
 
 //si importano tutti i pakage di validator e si destrutturano le funzioni che servono
