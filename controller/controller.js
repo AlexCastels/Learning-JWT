@@ -12,6 +12,16 @@ function handleError(err){
     console.log(err.message , err.code);
     let errors = {email : '',password: ''}
 
+    //incorrect email
+    if(err.message === 'incorrect email'){
+        errors.email = 'That email is not registered'
+    }
+
+    //incorrect password
+    if(err.message === 'incorrect password'){
+        errors.password = 'That password is incorrect'
+    }
+
     //duplicate error code, l'errore di duplicazione sarà sempre 11000, se è presente questo codice modifica direttamente
     //il val di email nell'obj vuoto
     if(err.code === 11000){
@@ -26,6 +36,7 @@ function handleError(err){
             errors[properties.path] = properties.message
         })
     }
+
     return errors
 }
 
@@ -50,6 +61,7 @@ export async function signUpPost(req , res){
         const token = createToken(user._id) //passiamo l'id recuperato dal DB, in mongo id = _id
         res.cookie('jwt', token, {httpOnly : true , maxAge: maxAge * 1000}) //salviamo il token in cookie 
         res.status(201).json({user: user._id})
+        console.log('Utente registrato');
     } catch (err) {
         const errors = handleError(err)
         res.status(400).json({errors})
@@ -65,8 +77,12 @@ export async function loginPost(req , res){
     try {
         //il metodo statico è stato definito in User.js
         const user = await User.login(email , password)
+        const token = createToken(user._id)
+        res.cookie('jwt', token, {httpOnly : true , maxAge: maxAge * 1000})
         res.status(200).json({user: user._id})
-    } catch (error) {
-        res.status(400).json({})
+        console.log('Utente loggato');
+    } catch (err) {
+        const errors = handleError(err)
+        res.status(400).json({errors})
     }
 }
