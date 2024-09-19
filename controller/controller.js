@@ -42,7 +42,7 @@ function handleError(err){
 
 const maxAge = 3 * 24 * 60 * 60 //3 day in millisec
 const createToken = (id) => { 
-    //genera il token tramite .sign, 1° arg il riferimento, 2° la key segreta, 3° obj di opzioni
+    //genera il token tramite .sign, 1° arg il riferimento, 2° la key segreta per controlli generali, 3° obj di opzioni
     return jwt.sign({id} , 'super secret key' , {expiresIn: maxAge})
 }
 

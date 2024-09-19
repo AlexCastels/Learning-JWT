@@ -7,6 +7,7 @@ import {
     login,
     loginPost,
 } from "./controller/controller.js";
+import { requireAuth } from "./middleware/middleware.js";
 //in package.json aggiungendo la proprietà "type" : "module" permettiamo l'utilizzo dei moduli ECMA
 //senza dover specificare l'estenzione diretta del file con .mjs
 const app = express();
@@ -37,7 +38,7 @@ connectDB()
 //istanziamo le route, avremo le funzioni in controller.js che si occuperanno di manipolare/controllare il nostro db
 //il primo argomento indica la route da navigare, il secondo arg la funzione da eseguire quando viene mandata la richiesta
 app.get("/", (req, res) => res.render("home"));
-app.get("/smoothies", (req, res) => res.render("smoothies")); //indica i file in View
+app.get("/smoothies", requireAuth, (req, res) => res.render("smoothies")); //indica i file in View
 app.get("/signup", signUp);
 app.post("/signup", signUpPost);
 app.get("/login", login);
