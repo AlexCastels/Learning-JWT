@@ -41,8 +41,8 @@ function handleError(err){
 }
 
 const maxAge = 3 * 24 * 60 * 60 //3 day in millisec
+//genera il token tramite .sign, 1° arg il riferimento, 2° la key segreta per controlli generali, 3° obj di opzioni
 const createToken = (id) => { 
-    //genera il token tramite .sign, 1° arg il riferimento, 2° la key segreta per controlli generali, 3° obj di opzioni
     return jwt.sign({id} , 'super secret key' , {expiresIn: maxAge})
 }
 
@@ -50,13 +50,13 @@ export async function signUp(req , res){
     res.render('signup')
 }
 
+//con .create possiamo utilizzare lo schema creato e popolarlo con gli elementi richiesti
+//il processo è asincrono ovviamente 
+//con .status settiamo lo stato in risposta, e mandiamo il json con i dati
+//con .send invece mandiamo qualcosa da visualizzare nel browser
 export async function signUpPost(req , res){
     const {email , password } = req.body // req.body possiamo accedere alla richiesta
     try {
-        //con .create possiamo utilizzare lo schema creato e popolarlo con gli elementi richiesti
-        //il processo è asincrono ovviamente 
-        //con .status settiamo lo stato in risposta, e mandiamo il json con i dati
-        //con .send invece mandiamo qualcosa da visualizzare nel browser
         const user = await User.create({email ,password});
         const token = createToken(user._id) //passiamo l'id recuperato dal DB, in mongo id = _id
         res.cookie('jwt', token, {httpOnly : true , maxAge: maxAge * 1000}) //salviamo il token in cookie 
@@ -91,5 +91,6 @@ export function logoutGet(req,res){
     //recuperare il cookie con nome, il 2° arg permette di rimpiazzare il valore
     //indiachiamo anche che l'età del token è di un millisec
     res.cookie('jwt'  , '' , {maxAge : 1})
+    console.log('utente sloggato');
     res.redirect('/')
 }
