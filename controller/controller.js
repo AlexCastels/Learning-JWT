@@ -86,3 +86,10 @@ export async function loginPost(req , res){
         res.status(400).json({errors})
     }
 }
+
+export function logoutGet(req,res){
+    //recuperare il cookie con nome, il 2° arg permette di rimpiazzare il valore
+    //indiachiamo anche che l'età del token è di un millisec
+    res.cookie('jwt'  , '' , {maxAge : 1})
+    res.redirect('/')
+}

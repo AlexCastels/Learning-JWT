@@ -6,6 +6,7 @@ import {
     signUpPost,
     login,
     loginPost,
+    logoutGet,
 } from "./controller/controller.js";
 import { requireAuth } from "./middleware/middleware.js";
 //in package.json aggiungendo la proprietà "type" : "module" permettiamo l'utilizzo dei moduli ECMA
@@ -43,5 +44,5 @@ app.get("/signup", signUp);
 app.post("/signup", signUpPost);
 app.get("/login", login);
 app.post("/login", loginPost);
-
+app.get("/logout" , logoutGet);
 
