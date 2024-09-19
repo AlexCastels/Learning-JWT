@@ -62,6 +62,11 @@ export async function login(req , res){
 
 export async function loginPost(req , res){
     const {email , password } = req.body
-    console.log(email , password);
-    res.render('user login')
+    try {
+        //il metodo statico è stato definito in User.js
+        const user = await User.login(email , password)
+        res.status(200).json({user: user._id})
+    } catch (error) {
+        res.status(400).json({})
+    }
 }

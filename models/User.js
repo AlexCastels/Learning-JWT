@@ -40,6 +40,24 @@ userSchema.pre('save' , async function(){
     this.password = await bcrypt.hash(this.password, salt) //genera l'hash della pass insieme al salt    
 })
 
+//static method to login user
+//possiamo definire dei metodi definiti statici legati allo schema, in questo caso un login
+//this si riferisce al modello che abbiamo creato di user (l'obj) e findOne è un metodo per interfacciare il DB
+//se viene trovata un email significherà che esiste l'user, altrimenti la variabile darà undefined
+//la funzione vorrà passati email e password dall'utente in fase di login, funzione definita in controller.js
+userSchema.statics.login = async function(email , password){
+    const user = await this.findOne({email})
+    if(user){
+        //tramite il metodo della libreria compariamo la password criptata presente nel DB, con la password che fornisce l'user
+        const auth = await bcrypt.compare(password , user.password)
+        if(auth){
+            return user
+        }
+        throw Error('Incorrect password')
+    }
+    throw Error('Incorrect email')
+}
+
 const User = mongoose.model('user' , userSchema)
 
 export default User

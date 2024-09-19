@@ -13,11 +13,40 @@
 
 <script>
     const form = document.querySelector('form')
-    form.addEventListener('submit' , (event) => {
+    const emailError = document.querySelector('.email.error') //se è presente uno spazio in class mettiamo il punto
+    const passwordError = document.querySelector('.password.error')
+
+    form.addEventListener('submit' , async (event) => {
         event.preventDefault()
+
+        //reset errors
+        emailError.textContent = ''
+        passwordError.textContent = ''
+
+        //get values
         const email = form.email.value
         const password = form.password.value
-        console.log(email , password);
+        try {
+            const res = await fetch('/login' , {
+                method : 'POST',
+                body: JSON.stringify({email , password}),
+                headers: {'Content-Type' : 'application/json'}
+            })
+            const data = await res.json() //questo conterrà l'obj in risposta che abbiamo settato nei controller, o id o errors
+            console.log(data);
+            if(data.errors){
+                emailError.textContent = data.errors.email
+                passwordError.textContent = data.errors.password
+            }
+
+            // redirect to homepage
+            if(data.user){
+                //location.assign('/') 
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
     })
 </script>
 
